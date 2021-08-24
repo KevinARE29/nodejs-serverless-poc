@@ -12,12 +12,14 @@ async function bootstrap(): Promise<any> {
   app.setGlobalPrefix('movies-service')
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
-    .addServer('http://127.0.0.1:3000/movies-service/')
+    .setTitle('Movies API')
+    .setDescription(
+      'The Movies API allow admins to create, update and delete movies. And allow external users to retrieve movie details',
+    )
+    .addBearerAuth()
     .setVersion('1.0')
-    .addTag('cats')
     .build()
+
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('movies-service/docs', app, document)
 
@@ -35,11 +37,3 @@ export const handler: Handler = async (
   server = server ?? (await bootstrap())
   return server(event, context, callback)
 }
-
-process.on('unhandledRejection', (reason) => {
-  console.error(reason)
-})
-
-process.on('uncaughtException', (reason) => {
-  console.error(reason)
-})
