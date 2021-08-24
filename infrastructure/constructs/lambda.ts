@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
 import { NodejsFunction, NodejsFunctionProps } from '@aws-cdk/aws-lambda-nodejs'
 import * as logs from '@aws-cdk/aws-logs'
+import { Duration } from '@aws-cdk/core'
 
 type NodejsServiceFunctionProps = NodejsFunctionProps
 
@@ -15,6 +16,7 @@ export class NodejsServiceFunction extends NodejsFunction {
     const handler = 'handler'
     const bundling = {
       ...props.bundling,
+      timeout: Duration.seconds(10),
       externalModules: ['aws-sdk'],
     }
     const logRetention = logs.RetentionDays.ONE_DAY
@@ -29,4 +31,16 @@ export class NodejsServiceFunction extends NodejsFunction {
     })
     this.addEnvironment('LOG_LEVEL', '40')
   }
+}
+
+export const defaultCommandHooks = {
+  beforeBundling(inputDir: string, outputDir: string): string[] {
+    return ['']
+  },
+  beforeInstall(inputDir: string, outputDir: string): string[] {
+    return ['']
+  },
+  afterBundling(inputDir: string, outputDir: string): string[] {
+    return ['']
+  },
 }

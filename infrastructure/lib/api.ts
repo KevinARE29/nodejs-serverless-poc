@@ -3,9 +3,14 @@ import * as lambda from '@aws-cdk/aws-lambda'
 import * as apigw from '@aws-cdk/aws-apigatewayv2'
 import { CorsHttpMethod, HttpMethod } from '@aws-cdk/aws-apigatewayv2'
 import * as apigi from '@aws-cdk/aws-apigatewayv2-integrations'
+import { HttpUserPoolAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers'
+import * as cognito from '@aws-cdk/aws-cognito'
 
 interface ApplicationAPIProps {
   moviesService: lambda.IFunction
+  storeService: lambda.IFunction
+  userPool: cognito.IUserPool
+  userPoolClient: cognito.IUserPoolClient
 }
 
 export class ApplicationAPI extends cdk.Construct {
@@ -42,6 +47,13 @@ export class ApplicationAPI extends cdk.Construct {
       },
     })
 
+    // Authorizer -------------------------------------------------------
+
+    const authorizer = new HttpUserPoolAuthorizer({
+      userPool: props.userPool,
+      userPoolClient: props.userPoolClient,
+    })
+
     // Movies Service -------------------------------------------------
 
     const moviesServiceIntegration = new apigi.LambdaProxyIntegration({
@@ -49,9 +61,16 @@ export class ApplicationAPI extends cdk.Construct {
     })
 
     this.httpApi.addRoutes({
+      path: `/movies-service/docs/{proxy+}`,
+      methods: serviceMethods,
+      integration: moviesServiceIntegration,
+    })
+
+    this.httpApi.addRoutes({
       path: `/movies-service/{proxy+}`,
       methods: serviceMethods,
       integration: moviesServiceIntegration,
+      authorizer,
     })
 
     // Outputs -----------------------------------------------------------
