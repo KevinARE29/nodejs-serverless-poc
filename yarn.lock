@@ -196,7 +196,7 @@
     constructs "^3.3.69"
     punycode "^2.1.1"
 
-"@aws-cdk/aws-ec2@1.119.0":
+"@aws-cdk/aws-ec2@1.119.0", "@aws-cdk/aws-ec2@^1.119.0":
   version "1.119.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-ec2/-/aws-ec2-1.119.0.tgz#49d88b97564919a0b5241dc01d0dc367683b347f"
   integrity sha512-nPtTTIdQR3PQjnUnnuYvGcE4Ng3Eu3ivXRA0Lk4fswGYjxvH9jAOO0NNN60sqMF8Ml8d9Hy/Bpus5ik2BC07Jw==
@@ -342,6 +342,23 @@
     "@aws-cdk/core" "1.119.0"
     constructs "^3.3.69"
 
+"@aws-cdk/aws-rds@^1.119.0":
+  version "1.119.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-rds/-/aws-rds-1.119.0.tgz#532eb77f29ce37107cb9bc444382031f5f74fe83"
+  integrity sha512-eylvgbM5sviuCl3QdDf5KSdRAq+lTkdjQsqqCWClOFoszv3eqcgLFkiyykmT4nCtWmUtP394RFOxvSIPNFPzKA==
+  dependencies:
+    "@aws-cdk/aws-cloudwatch" "1.119.0"
+    "@aws-cdk/aws-ec2" "1.119.0"
+    "@aws-cdk/aws-events" "1.119.0"
+    "@aws-cdk/aws-iam" "1.119.0"
+    "@aws-cdk/aws-kms" "1.119.0"
+    "@aws-cdk/aws-logs" "1.119.0"
+    "@aws-cdk/aws-s3" "1.119.0"
+    "@aws-cdk/aws-secretsmanager" "1.119.0"
+    "@aws-cdk/core" "1.119.0"
+    "@aws-cdk/cx-api" "1.119.0"
+    constructs "^3.3.69"
+
 "@aws-cdk/aws-route53@1.119.0":
   version "1.119.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-route53/-/aws-route53-1.119.0.tgz#2e47459fe98d2e08fa2682e6dd30858edab62086"
@@ -376,6 +393,28 @@
     "@aws-cdk/aws-events" "1.119.0"
     "@aws-cdk/aws-iam" "1.119.0"
     "@aws-cdk/aws-kms" "1.119.0"
+    "@aws-cdk/core" "1.119.0"
+    "@aws-cdk/cx-api" "1.119.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-sam@1.119.0":
+  version "1.119.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-sam/-/aws-sam-1.119.0.tgz#868de30f90f24bd2b5d697360425e8209d29a055"
+  integrity sha512-FoaDiVKyeWhvWQeNKWYQxGNj5B6BetfxsKJQLSAUW6riun1MUZh+FaqsLA4j/QyjGLEdQwf2O2jazgJTQItzSg==
+  dependencies:
+    "@aws-cdk/core" "1.119.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-secretsmanager@1.119.0", "@aws-cdk/aws-secretsmanager@^1.119.0":
+  version "1.119.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-secretsmanager/-/aws-secretsmanager-1.119.0.tgz#c861b3b3a22c8270338c524cb09ad44c05ca0ce2"
+  integrity sha512-8Ci5OFahV3L0U3Ur4ZHX56EeqWJGU7WT4eyYvro9puga4JBIVmFFSLB7dNHHGRQj9Mn4mWqFFzT18wVQJ6Uqxw==
+  dependencies:
+    "@aws-cdk/aws-ec2" "1.119.0"
+    "@aws-cdk/aws-iam" "1.119.0"
+    "@aws-cdk/aws-kms" "1.119.0"
+    "@aws-cdk/aws-lambda" "1.119.0"
+    "@aws-cdk/aws-sam" "1.119.0"
     "@aws-cdk/core" "1.119.0"
     "@aws-cdk/cx-api" "1.119.0"
     constructs "^3.3.69"
@@ -424,7 +463,7 @@
     "@aws-cdk/core" "1.119.0"
     constructs "^3.3.69"
 
-"@aws-cdk/aws-ssm@1.119.0":
+"@aws-cdk/aws-ssm@1.119.0", "@aws-cdk/aws-ssm@^1.119.0":
   version "1.119.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-ssm/-/aws-ssm-1.119.0.tgz#649f2072203f760216876d002da72aefeb4b96e3"
   integrity sha512-uY7lBSApILpVRxW8x///IFhmEW+M783+uCZjTAlkMtDz9/td8NJ/k0z+VwBHTOSRniW4ASJyBFJs5CJNbAyPgw==
@@ -1353,6 +1392,23 @@
     chalk "^4.1.0"
     consola "^2.15.0"
     node-fetch "^2.6.1"
+
+"@prisma/client@^2.30.0":
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.30.0.tgz#b0ed9db67405f619e428577f2d45843104142e00"
+  integrity sha512-tjJNHVfgyNOwS2F+AkjMMCJGPnXzHuUCrOnAMJyidAu4aNzxbJ8jWwjt96rRMpyrg9Hwen3xqqQ2oA+ikK7nhQ==
+  dependencies:
+    "@prisma/engines-version" "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
+
+"@prisma/engines-version@2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb":
+  version "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb.tgz#1360113dc19e1d43d4442e3b638ccfa0e1711943"
+  integrity sha512-oThNpx7HtJ0eEmnvrWARYcNCs6dqFdAK3Smt2bJVDD6Go4HLuuhjx028osP+rHaFrGOTx7OslLZYtvvFlAXRDA==
+
+"@prisma/engines@2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb":
+  version "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb.tgz#b4d91ff876662b1de83e0cc913149a1c088becc7"
+  integrity sha512-LPKq88lIbYezvX0OOc1PU42hHdTsSMPJWmK8lusaHK7DaLHyXjDp/551LbsVapypbjW6N3Jx/If6GoMDASSMSw==
 
 "@schematics/schematics@0.1102.6":
   version "0.1102.6"
@@ -6525,6 +6581,13 @@ printj@~1.1.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/printj/-/printj-1.1.2.tgz#d90deb2975a8b9f600fb3a1c94e3f4c53c78a222"
   integrity sha512-zA2SmoLaxZyArQTOPj5LXecR+RagfPSU5Kw1qP+jkWeNlrq+eJZyY2oS68SU1Z/7/myXM4lo9716laOFAVStCQ==
+
+prisma@^2.30.0:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-2.30.0.tgz#5b12091c480d538540b898d364b73651d44b4a01"
+  integrity sha512-2XYpSibcVpMd1JDxYypGDU/JKq0W2f/HI1itdddr4Pfg+q6qxt/ItWKcftv4/lqN6u/BVlQ2gDzXVEjpHeO5kQ==
+  dependencies:
+    "@prisma/engines" "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
