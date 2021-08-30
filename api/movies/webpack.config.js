@@ -11,7 +11,7 @@ module.exports = (options, webpack) => {
 
   return {
     ...options,
-    externals: [],
+    externals: ['_http_common'], // TODO: fix when this PR gets merged: https://github.com/prisma/prisma/issues/6899
     output: {
       libraryTarget: 'commonjs2',
     },
@@ -53,6 +53,8 @@ module.exports = (options, webpack) => {
           '../../node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js',
           '../../node_modules/swagger-ui-dist/favicon-16x16.png',
           '../../node_modules/swagger-ui-dist/favicon-32x32.png',
+          '../../node_modules/.prisma/client/query-engine-rhel-openssl-1.0.x',
+          './prisma/schema.prisma',
         ],
       }),
     ],
