@@ -8,7 +8,6 @@ import * as cognito from '@aws-cdk/aws-cognito'
 
 interface ApplicationAPIProps {
   moviesService: lambda.IFunction
-  storeService: lambda.IFunction
   userPool: cognito.IUserPool
   userPoolClient: cognito.IUserPoolClient
 }

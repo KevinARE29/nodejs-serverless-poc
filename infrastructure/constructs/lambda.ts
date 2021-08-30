@@ -16,10 +16,10 @@ export class NodejsServiceFunction extends NodejsFunction {
     const handler = 'handler'
     const bundling = {
       ...props.bundling,
-      timeout: Duration.seconds(10),
+      timeout: Duration.seconds(15),
       externalModules: ['aws-sdk'],
     }
-    const logRetention = logs.RetentionDays.ONE_DAY
+    const logRetention = logs.RetentionDays.ONE_MONTH
     const tracing = lambda.Tracing.ACTIVE
     super(scope, id, {
       ...props,
