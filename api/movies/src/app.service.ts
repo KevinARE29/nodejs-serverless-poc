@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { CreateMovieDto } from './dtos/request/create-movie.dto'
 import { UpdateMovieDto } from './dtos/request/update-movie.dto'
 import { PrismaService } from './prisma.service'
@@ -7,10 +7,11 @@ import { PrismaService } from './prisma.service'
 export class AppService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getMovies(): Promise<string> {
+  async getMovies(username: string): Promise<string> {
     return (
       'List of Movies' +
-      JSON.stringify(await this.prismaService.$queryRaw('SELECT now();'))
+      JSON.stringify(await this.prismaService.$queryRaw('SELECT now();')) +
+      JSON.stringify(username)
     )
   }
 
