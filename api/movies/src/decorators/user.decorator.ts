@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import jwt_decode from 'jwt-decode'
 
-export const User = createParamDecorator(
+export const CurrentUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest()
     try {

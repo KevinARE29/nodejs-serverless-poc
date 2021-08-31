@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger'
 import { AppService } from './app.service'
-import { User } from './decorators/user.decorator'
+import { CurrentUser } from './decorators/user.decorator'
 import { CreateMovieDto } from './dtos/request/create-movie.dto'
 import { UpdateMovieDto } from './dtos/request/update-movie.dto'
+import { IUser } from './interfaces'
 
 @ApiBearerAuth()
 @Controller('movies')
@@ -15,7 +16,7 @@ export class AppController {
     summary: 'List Movies',
     description: 'Use this endpoint for retrieving all the movies',
   })
-  getMovies(@User() { username }: any): Promise<string> {
+  getMovies(@CurrentUser() { username }: IUser): Promise<string> {
     return this.appService.getMovies(username)
   }
 
