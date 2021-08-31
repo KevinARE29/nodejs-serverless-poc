@@ -1,10 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger'
 import { AppService } from './app.service'
-import { CurrentUser } from './decorators/user.decorator'
 import { CreateMovieDto } from './dtos/request/create-movie.dto'
+import { PaginationQueryDto } from './dtos/request/pagination-query.dto'
 import { UpdateMovieDto } from './dtos/request/update-movie.dto'
-import { IUser } from './interfaces'
+import { MoviesCollectionDto } from './dtos/response/movies-collection.dto'
 
 @ApiBearerAuth()
 @Controller('movies')
@@ -16,8 +25,10 @@ export class AppController {
     summary: 'List Movies',
     description: 'Use this endpoint for retrieving all the movies',
   })
-  getMovies(@CurrentUser() { username }: IUser): Promise<string> {
-    return this.appService.getMovies(username)
+  async getMovies(
+    @Query() paginationQueryDto: PaginationQueryDto,
+  ): Promise<MoviesCollectionDto> {
+    return this.appService.getMovies(paginationQueryDto)
   }
 
   @Post()
@@ -25,7 +36,7 @@ export class AppController {
     summary: 'Create Movie',
     description: 'Use this endpoint for create a new movie',
   })
-  createMovie(@Body() input: CreateMovieDto): Promise<string> {
+  async createMovie(@Body() input: CreateMovieDto): Promise<string> {
     return this.appService.createMovie(input)
   }
 
@@ -34,7 +45,7 @@ export class AppController {
     summary: 'Get Movie',
     description: 'Use this endpoint for get a movie detail',
   })
-  getMovie(@Param('uuid') uuid: string): Promise<string> {
+  async getMovie(@Param('uuid') uuid: string): Promise<string> {
     return this.appService.getMovie(uuid)
   }
 
@@ -43,7 +54,7 @@ export class AppController {
     summary: 'Update Movie',
     description: 'Use this endpoint for update a movie',
   })
-  updateMovie(
+  async updateMovie(
     @Param('uuid') uuid: string,
     @Body() input: UpdateMovieDto,
   ): Promise<string> {
@@ -55,7 +66,7 @@ export class AppController {
     summary: 'Delete Movie',
     description: 'Use this endpoint for delete a movie',
   })
-  deleteMovie(@Param('uuid') uuid: string): Promise<string> {
+  async deleteMovie(@Param('uuid') uuid: string): Promise<string> {
     return this.appService.deleteMovie(uuid)
   }
 }

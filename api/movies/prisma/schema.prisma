@@ -11,10 +11,34 @@ generator client {
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
-model Movies {
-  id       Int     @id @default(autoincrement())
-  uuid     String  @unique @default(uuid())
-  name     String
-  sinopsis String?
-  duration Float
+model Movie {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid()) @db.Uuid
+  name      String
+  synopsis  String?
+  duration  Int
+  price     Float
+  likes     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  poster   Attachment? @relation(fields: [posterId], references: [id])
+  posterId Int?        @map(name: "poster_id")
+
+  @@map("movies")
+}
+
+model Attachment {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(uuid()) @db.Uuid
+  key         String   @unique
+  path        String
+  ext         String
+  contentType String   @map(name: "content_type")
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+
+  movie Movie?
+
+  @@map(name: "attachments")
 }

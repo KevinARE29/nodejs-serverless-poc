@@ -1,15 +1,27 @@
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from './app.module'
 import serverlessExpress from '@vendia/serverless-express'
 import { Callback, Context, Handler } from 'aws-lambda'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import { ValidationPipe } from '@nestjs/common'
+import { AppModule } from './app.module'
 
 let server: Handler
 
 async function bootstrap(): Promise<any> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
   app.setGlobalPrefix('movies-service')
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  )
 
   const config = new DocumentBuilder()
     .setTitle('Movies API')

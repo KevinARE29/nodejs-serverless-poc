@@ -12,3 +12,8 @@ export interface IUser {
   client_id: string
   username: string
 }
+export interface IEdge<T> {
+  node: T
+}
+
+export type PaginationQuery = Record<'take' | 'skip', number>
