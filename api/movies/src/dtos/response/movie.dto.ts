@@ -25,4 +25,7 @@ export class MovieDto {
 
   @Expose()
   readonly isActive: boolean
+
+  @Expose()
+  readonly poster: string
 }

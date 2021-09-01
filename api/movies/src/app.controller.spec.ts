@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { AppService } from './services/movies.service'
 
 describe('AppController', () => {
   let appController: AppController
@@ -16,7 +16,9 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(appController.getMovies()).toBe('Hello World!')
+      expect(appController.getMovies({ page: 1, perPage: 10 })).toBe(
+        'Hello World!',
+      )
     })
   })
 })

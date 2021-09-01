@@ -9,11 +9,12 @@ import {
   Query,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger'
-import { AppService } from './app.service'
+import { AppService } from './services/movies.service'
 import { CreateMovieDto } from './dtos/request/create-movie.dto'
 import { PaginationQueryDto } from './dtos/request/pagination-query.dto'
 import { UpdateMovieDto } from './dtos/request/update-movie.dto'
 import { MoviesCollectionDto } from './dtos/response/movies-collection.dto'
+import { MovieDto } from './dtos/response/movie.dto'
 
 @ApiBearerAuth()
 @Controller('movies')
@@ -36,7 +37,7 @@ export class AppController {
     summary: 'Create Movie',
     description: 'Use this endpoint for create a new movie',
   })
-  async createMovie(@Body() input: CreateMovieDto): Promise<string> {
+  async createMovie(@Body() input: CreateMovieDto): Promise<MovieDto> {
     return this.appService.createMovie(input)
   }
 
