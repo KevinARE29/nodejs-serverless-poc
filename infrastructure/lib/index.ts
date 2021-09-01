@@ -4,6 +4,7 @@ import { ApplicationAPI } from './api'
 import { ApplicationAuth } from './auth'
 import { AppServices } from './services'
 import { ApiDatabase } from './database'
+import { AttachmentStorage } from './storage'
 
 export class APIStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -11,6 +12,7 @@ export class APIStack extends cdk.Stack {
 
     const vpc = new ec2.Vpc(this, 'ApiVpc')
     const db = new ApiDatabase(this, 'DB', { vpc })
+    const storage = new AttachmentStorage(this, 'Storage')
     const auth = new ApplicationAuth(this, 'Auth')
 
     const services = new AppServices(this, 'Services', {
@@ -18,6 +20,7 @@ export class APIStack extends cdk.Stack {
       dbCredentialsSecret: db.dbCredentialsSecret,
       lambdaToRDSProxyGroup: db.lambdaToRDSProxyGroup,
       proxy: db.proxy,
+      attachmentBucket: storage.attachmentBucket,
     })
 
     new ApplicationAPI(this, 'API', {

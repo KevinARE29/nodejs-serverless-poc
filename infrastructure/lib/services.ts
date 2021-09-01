@@ -3,6 +3,7 @@ import * as cdk from '@aws-cdk/core'
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs'
 import * as ec2 from '@aws-cdk/aws-ec2'
 import * as rds from '@aws-cdk/aws-rds'
+import * as s3 from '@aws-cdk/aws-s3'
 import * as secretmanager from '@aws-cdk/aws-secretsmanager'
 import {
   defaultCommandHooks,
@@ -14,6 +15,7 @@ interface AppServicesProps {
   dbCredentialsSecret: secretmanager.Secret
   lambdaToRDSProxyGroup: ec2.SecurityGroup
   proxy: rds.DatabaseProxy
+  attachmentBucket: s3.IBucket
 }
 
 export class AppServices extends cdk.Construct {
@@ -55,5 +57,11 @@ export class AppServices extends cdk.Construct {
     )
 
     props.dbCredentialsSecret.grantRead(this.moviesService)
+    props.attachmentBucket.grantWrite(this.moviesService)
+
+    this.moviesService.addEnvironment(
+      'ATTACHMENT_BUCKET',
+      props.attachmentBucket.bucketName,
+    )
   }
 }
