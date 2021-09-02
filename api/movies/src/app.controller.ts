@@ -46,7 +46,7 @@ export class AppController {
     summary: 'Get Movie',
     description: 'Use this endpoint for get a movie detail',
   })
-  async getMovie(@Param('uuid') uuid: string): Promise<string> {
+  async getMovie(@Param('uuid') uuid: string): Promise<MovieDto> {
     return this.appService.getMovie(uuid)
   }
 

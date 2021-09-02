@@ -36,8 +36,18 @@ export class AppService {
     return plainToClass(MoviesCollectionDto, { data: movies, pagination })
   }
 
-  async getMovie(uuid: string): Promise<string> {
-    return 'Movie Detail'
+  async getMovie(uuid: string): Promise<MovieDto> {
+    const {
+      poster: { path, key, ext },
+      ...movie
+    } = await this.prismaService.movie.findUnique({
+      where: { uuid },
+      include: { poster: true },
+    })
+
+    const poster = this.attachmentsService.getSignedURL(`${path}/${key}.${ext}`)
+
+    return plainToClass(MovieDto, { ...movie, poster })
   }
 
   async createMovie(dto: CreateMovieDto): Promise<MovieDto> {
