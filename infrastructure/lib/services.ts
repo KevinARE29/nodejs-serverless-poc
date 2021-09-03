@@ -16,7 +16,8 @@ interface AppServicesProps {
 }
 
 export class AppServices extends cdk.Construct {
-  public readonly moviesService: NodejsFunction
+  public readonly getMovies: NodejsFunction
+  public readonly getMovie: NodejsFunction
 
   constructor(scope: cdk.Construct, id: string, props: AppServicesProps) {
     super(scope, id)
@@ -27,29 +28,34 @@ export class AppServices extends cdk.Construct {
 
     const databaseUrl = `postgresql://${username}:${password}@${props.proxy.endpoint}:5432/movies?schema=public`
 
-    // Movies Service -------------------------------------------------
-    this.moviesService = new NodejsServiceFunction(
-      this,
-      'MoviesServiceLambda',
-      {
-        entry: path.join(
-          __dirname,
-          '../../services/movies/createMovie/index.ts',
-        ),
-        vpc: props.vpc,
-        securityGroups: [props.lambdaToRDSProxyGroup],
-        environment: {
-          DATABASE_URL: databaseUrl,
-        },
+    // Get Movies -------------------------------------------------
+    this.getMovies = new NodejsServiceFunction(this, 'GetMovies', {
+      entry: path.join(__dirname, '../../services/movies/getMovies.js'),
+      vpc: props.vpc,
+      securityGroups: [props.lambdaToRDSProxyGroup],
+      environment: {
+        DATABASE_URL: databaseUrl,
       },
-    )
+    })
 
-    props.dbCredentialsSecret.grantRead(this.moviesService)
-    props.attachmentBucket.grantWrite(this.moviesService)
+    props.dbCredentialsSecret.grantRead(this.getMovies)
+    props.attachmentBucket.grantWrite(this.getMovies)
 
-    this.moviesService.addEnvironment(
+    this.getMovies.addEnvironment(
       'ATTACHMENT_BUCKET',
       props.attachmentBucket.bucketName,
     )
+
+    // Get Movie -------------------------------------------------
+    this.getMovie = new NodejsServiceFunction(this, 'GetMovie', {
+      entry: path.join(__dirname, '../../services/movies/getMovie.js'),
+      vpc: props.vpc,
+      securityGroups: [props.lambdaToRDSProxyGroup],
+      environment: {
+        DATABASE_URL: databaseUrl,
+      },
+    })
+
+    props.dbCredentialsSecret.grantRead(this.getMovie)
   }
 }

@@ -9,7 +9,8 @@ import {
 } from './models/movie'
 
 interface ApplicationAPIProps {
-  moviesService: lambda.IFunction
+  getMovies: lambda.IFunction
+  getMovie: lambda.IFunction
   userPool: cognito.IUserPool
 }
 
@@ -45,23 +46,14 @@ export class ApplicationAPI extends cdk.Construct {
       },
     )
 
-    const badRequestResponse = {
+    this.restApi.addGatewayResponse('BadRequestBodyResponse', {
+      type: apigw.ResponseType.BAD_REQUEST_BODY,
       statusCode: '400',
       templates: {
         'application/json': JSON.stringify({
           message: '$context.error.validationErrorString',
         }),
       },
-    }
-
-    this.restApi.addGatewayResponse('GatewayBadRequestBodyResponse', {
-      type: apigw.ResponseType.BAD_REQUEST_BODY,
-      ...badRequestResponse,
-    })
-
-    this.restApi.addGatewayResponse('GatewayBadRequestParametersResponse', {
-      type: apigw.ResponseType.BAD_REQUEST_PARAMETERS,
-      ...badRequestResponse,
     })
 
     // Authorizer -------------------------------------------------------
@@ -74,13 +66,16 @@ export class ApplicationAPI extends cdk.Construct {
       },
     )
 
-    // Movies Service -------------------------------------------------
-    const moviesResource = this.restApi.root.addResource('movies')
+    // Movies Endpoints -------------------------------------------------
+    // Resources
+    const movies = this.restApi.root.addResource('movies')
+    const movie = movies.addResource('{movie_id}')
 
-    const moviesServiceIntegration = new apigw.LambdaIntegration(
-      props.moviesService,
-    )
+    // Lambdas Integrations
+    const getMoviesIntegration = new apigw.LambdaIntegration(props.getMovies)
+    const getMovieIntegration = new apigw.LambdaIntegration(props.getMovie)
 
+    // Models (DTOs)
     const createMovieModel = this.restApi.addModel(
       'CreateMovieModel',
       createMovieModelOptions,
@@ -90,15 +85,28 @@ export class ApplicationAPI extends cdk.Construct {
       updateMovieModelOptions,
     )
 
-    moviesResource.addMethod(HttpMethod.GET, moviesServiceIntegration)
-    moviesResource.addMethod(HttpMethod.POST, moviesServiceIntegration, {
+    //Routes
+    movies.addMethod(HttpMethod.GET, getMoviesIntegration, {
+      requestParameters: {
+        'method.request.querystring.page': true,
+        'method.request.querystring.perPage': true,
+      },
+      requestValidator,
+    })
+    movies.addMethod(HttpMethod.POST, getMoviesIntegration, {
       requestModels: { 'application/json': createMovieModel },
       requestValidator,
     })
-    moviesResource.addMethod(HttpMethod.PUT, moviesServiceIntegration, {
+    movie.addMethod(HttpMethod.GET, getMovieIntegration, {
+      authorizer,
+    })
+    movie.addMethod(HttpMethod.PUT, getMoviesIntegration, {
       authorizer,
       requestModels: { 'application/json': updateMovieModel },
       requestValidator,
+    })
+    movie.addMethod(HttpMethod.DELETE, getMoviesIntegration, {
+      authorizer,
     })
 
     // Outputs -----------------------------------------------------------

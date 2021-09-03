@@ -24,7 +24,8 @@ export class APIStack extends cdk.Stack {
     })
 
     new ApplicationAPI(this, 'API', {
-      moviesService: services.moviesService,
+      getMovies: services.getMovies,
+      getMovie: services.getMovie,
       userPool: auth.userPool,
     })
   }
