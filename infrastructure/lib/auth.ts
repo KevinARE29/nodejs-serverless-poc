@@ -4,8 +4,6 @@ import * as cognito from '@aws-cdk/aws-cognito'
 export class ApplicationAuth extends cdk.Construct {
   public readonly userPool: cognito.IUserPool
 
-  public readonly userPoolClient: cognito.IUserPoolClient
-
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id)
 
@@ -33,8 +31,7 @@ export class ApplicationAuth extends cdk.Construct {
       },
     })
 
-    this.userPoolClient = new cognito.UserPoolClient(this, 'UserPoolClient', {
-      userPool: this.userPool,
+    this.userPool.addClient('UserPoolClient', {
       generateSecret: false,
       authFlows: {
         adminUserPassword: true,

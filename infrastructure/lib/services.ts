@@ -5,10 +5,7 @@ import * as ec2 from '@aws-cdk/aws-ec2'
 import * as rds from '@aws-cdk/aws-rds'
 import * as s3 from '@aws-cdk/aws-s3'
 import * as secretmanager from '@aws-cdk/aws-secretsmanager'
-import {
-  defaultCommandHooks,
-  NodejsServiceFunction,
-} from '../constructs/lambda'
+import { NodejsServiceFunction } from '../constructs/lambda'
 
 interface AppServicesProps {
   vpc: ec2.Vpc
@@ -31,27 +28,18 @@ export class AppServices extends cdk.Construct {
     const databaseUrl = `postgresql://${username}:${password}@${props.proxy.endpoint}:5432/movies?schema=public`
 
     // Movies Service -------------------------------------------------
-    const moviesServicePath = path.join(__dirname, '../../api/movies/dist')
     this.moviesService = new NodejsServiceFunction(
       this,
       'MoviesServiceLambda',
       {
-        entry: `${moviesServicePath}/main.js`,
+        entry: path.join(
+          __dirname,
+          '../../services/movies/createMovie/index.ts',
+        ),
         vpc: props.vpc,
         securityGroups: [props.lambdaToRDSProxyGroup],
         environment: {
           DATABASE_URL: databaseUrl,
-        },
-        bundling: {
-          commandHooks: {
-            ...defaultCommandHooks,
-            afterBundling(inputDir: string, outputDir: string): string[] {
-              // TODO: improve this
-              return [
-                `cp ${moviesServicePath}/favicon* ${moviesServicePath}/swagger* ${moviesServicePath}/schema* ${moviesServicePath}/query-engine-rhel-openssl-1.0.* ${outputDir}`,
-              ]
-            },
-          },
         },
       },
     )
