@@ -17,7 +17,7 @@ export class NodejsServiceFunction extends NodejsFunction {
     const bundling = {
       ...props.bundling,
       timeout: Duration.seconds(15),
-      externalModules: ['aws-sdk'],
+      externalModules: ['aws-sdk', 'pg-native'],
     }
     const logRetention = logs.RetentionDays.ONE_MONTH
     const tracing = lambda.Tracing.ACTIVE

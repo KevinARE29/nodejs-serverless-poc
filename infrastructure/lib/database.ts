@@ -91,6 +91,7 @@ export class ApiDatabase extends cdk.Construct {
       debugLogging: true,
       vpc: props.vpc,
       securityGroups: [dbConnectionGroup],
+      requireTLS: false,
     })
 
     // Workaround for bug where TargetGroupName is not set but required
