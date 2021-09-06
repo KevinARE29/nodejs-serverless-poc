@@ -2,19 +2,21 @@ import { Client } from 'pg'
 import { paginationSerializer } from './utils'
 
 exports.handler = async (event, context) => {
+  let pgClient: Client
+
   try {
     const { page, perPage } = event.queryStringParameters
 
-    const client = new Client(process.env.DATABASE_URL)
-    await client.connect()
+    pgClient = new Client(process.env.DATABASE_URL)
+    await pgClient.connect()
 
-    const { rows, rowCount } = await client.query(
+    const { rows, rowCount } = await pgClient.query(
       'SELECT * FROM movies LIMIT $1 OFFSET $2',
       [perPage, (page - 1) * perPage],
     )
 
     const pagination = paginationSerializer(rowCount, { page, perPage })
-    await client.end()
+    await pgClient.end()
 
     return {
       statusCode: 200,
@@ -25,7 +27,7 @@ exports.handler = async (event, context) => {
     }
   } catch (err) {
     console.error(err)
-    await client.end()
+    await pgClient.end()
 
     return {
       statusCode: 422,

@@ -1,17 +1,19 @@
 import { Client } from 'pg'
 
 exports.handler = async (event, context) => {
+  let pgClient: Client
+
   try {
-    const client = new Client(process.env.DATABASE_URL)
+    pgClient = new Client(process.env.DATABASE_URL)
     const movieId = event.pathParameters.movie_id
 
-    await client.connect()
+    await pgClient.connect()
     const movie = (
-      await client.query('SELECT * FROM movies WHERE id = $1', [movieId])
+      await pgClient.query('SELECT * FROM movies WHERE id = $1', [movieId])
     ).rows[0]
 
     if (!movie) {
-      await client.end()
+      await pgClient.end()
 
       return {
         statusCode: 404,
@@ -19,19 +21,19 @@ exports.handler = async (event, context) => {
       }
     }
 
-    await client.end()
+    await pgClient.end()
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        data: rows,
+        data: movie,
         event,
         context,
       }),
     }
   } catch (err) {
     console.error(err)
-    await client.end()
+    await pgClient.end()
 
     return {
       statusCode: 422,

@@ -9,7 +9,7 @@
 import * as AWS from 'aws-sdk'
 import AWSXRay from 'aws-xray-sdk'
 
-let _s3
+let _s3: AWS.S3
 
 /**
  * Creates the Amazon S3 client for use in the application.
@@ -22,7 +22,7 @@ const s3 = () => {
   }
   return _s3
 }
-let _ses
+let _ses: AWS.SES
 
 /**
  * Creates the Simple Email Service (SES) client for use in the application.
@@ -36,7 +36,7 @@ const ses = () => {
   return _ses
 }
 
-let _eventbridge
+let _eventbridge: AWS.EventBridge
 
 /**
  * Creates the Eventbridge client for use in the application.
@@ -50,7 +50,7 @@ const eventbridge = () => {
   return _eventbridge
 }
 
-let _cisp
+let _cisp: AWS.CognitoIdentityServiceProvider
 
 /**
  * Creates the Cognito Identity Service Provider client for use in the application.
