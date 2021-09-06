@@ -30,6 +30,7 @@ exports.handler = async (event, context) => {
       }),
     }
   } catch (err) {
+    console.error(err)
     await client.end()
 
     return {
