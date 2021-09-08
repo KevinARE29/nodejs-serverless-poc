@@ -4,14 +4,8 @@ import { NodejsFunction, NodejsFunctionProps } from '@aws-cdk/aws-lambda-nodejs'
 import * as logs from '@aws-cdk/aws-logs'
 import { Duration } from '@aws-cdk/core'
 
-type NodejsServiceFunctionProps = NodejsFunctionProps
-
 export class NodejsServiceFunction extends NodejsFunction {
-  constructor(
-    scope: cdk.Construct,
-    id: string,
-    props: NodejsServiceFunctionProps,
-  ) {
+  constructor(scope: cdk.Construct, id: string, props: NodejsFunctionProps) {
     const runtime = props.runtime ?? lambda.Runtime.NODEJS_14_X
     const handler = 'handler'
     const bundling = {

@@ -18,6 +18,7 @@ interface AppServicesProps {
 export class AppServices extends cdk.Construct {
   public readonly getMovies: NodejsFunction
   public readonly getMovie: NodejsFunction
+  public readonly createMovie: NodejsFunction
 
   constructor(scope: cdk.Construct, id: string, props: AppServicesProps) {
     super(scope, id)
@@ -30,25 +31,19 @@ export class AppServices extends cdk.Construct {
 
     // Get Movies -------------------------------------------------
     this.getMovies = new NodejsServiceFunction(this, 'GetMovies', {
-      entry: path.join(__dirname, '../../services/movies/getMovies.js'),
+      functionName: 'GetMovies',
+      entry: path.join(__dirname, '../../services/movies/getMovies/index.js'),
       vpc: props.vpc,
       securityGroups: [props.lambdaToRDSProxyGroup],
       environment: {
         DATABASE_URL: databaseUrl,
       },
     })
-
-    props.dbCredentialsSecret.grantRead(this.getMovies)
-    props.attachmentBucket.grantWrite(this.getMovies)
-
-    this.getMovies.addEnvironment(
-      'ATTACHMENT_BUCKET',
-      props.attachmentBucket.bucketName,
-    )
 
     // Get Movie -------------------------------------------------
     this.getMovie = new NodejsServiceFunction(this, 'GetMovie', {
-      entry: path.join(__dirname, '../../services/movies/getMovie.js'),
+      functionName: 'GetMovie',
+      entry: path.join(__dirname, '../../services/movies/getMovie/index.js'),
       vpc: props.vpc,
       securityGroups: [props.lambdaToRDSProxyGroup],
       environment: {
@@ -56,6 +51,22 @@ export class AppServices extends cdk.Construct {
       },
     })
 
-    props.dbCredentialsSecret.grantRead(this.getMovie)
+    // Create Movie -------------------------------------------------
+    this.createMovie = new NodejsServiceFunction(this, 'CreateMovie', {
+      functionName: 'CreateMovie',
+      entry: path.join(__dirname, '../../services/movies/createMovie/index.js'),
+      vpc: props.vpc,
+      securityGroups: [props.lambdaToRDSProxyGroup],
+      environment: {
+        DATABASE_URL: databaseUrl,
+      },
+    })
+
+    props.attachmentBucket.grantWrite(this.createMovie)
+
+    this.createMovie.addEnvironment(
+      'ATTACHMENT_BUCKET',
+      props.attachmentBucket.bucketName,
+    )
   }
 }

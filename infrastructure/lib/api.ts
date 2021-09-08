@@ -11,6 +11,7 @@ import {
 interface ApplicationAPIProps {
   getMovies: lambda.IFunction
   getMovie: lambda.IFunction
+  createMovie: lambda.IFunction
   userPool: cognito.IUserPool
 }
 
@@ -74,6 +75,9 @@ export class ApplicationAPI extends cdk.Construct {
     // Lambdas Integrations
     const getMoviesIntegration = new apigw.LambdaIntegration(props.getMovies)
     const getMovieIntegration = new apigw.LambdaIntegration(props.getMovie)
+    const createMovieIntegration = new apigw.LambdaIntegration(
+      props.createMovie,
+    )
 
     // Models (DTOs)
     const createMovieModel = this.restApi.addModel(
@@ -93,7 +97,7 @@ export class ApplicationAPI extends cdk.Construct {
       },
       requestValidator,
     })
-    movies.addMethod(HttpMethod.POST, getMoviesIntegration, {
+    movies.addMethod(HttpMethod.POST, createMovieIntegration, {
       requestModels: { 'application/json': createMovieModel },
       requestValidator,
     })
