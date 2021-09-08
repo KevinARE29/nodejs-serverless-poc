@@ -17,7 +17,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "import/named": "error",
-    "no-console": "error",
+    // "no-console": "error",
     "semi": "off",
     "import/order": [
       "error",
