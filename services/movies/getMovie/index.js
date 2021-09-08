@@ -1,7 +1,7 @@
 import { Client } from 'pg'
 
 exports.handler = async (event, context) => {
-  let pgClient: Client
+  let pgClient
 
   try {
     pgClient = new Client(process.env.DATABASE_URL)

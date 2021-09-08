@@ -1,11 +1,6 @@
 import { nanoid } from 'nanoid'
-import * as AWS from 'aws-sdk'
-import { Client } from 'pg'
 
-export const paginationSerializer = (
-  total: number,
-  query: { page: number; perPage: number },
-) => {
+export const paginationSerializer = (total, query) => {
   const { page, perPage } = query
   const itemsPerPage = total >= perPage ? perPage : total
   const totalPages = itemsPerPage > 0 ? Math.ceil(total / itemsPerPage) : null
@@ -22,14 +17,14 @@ export const paginationSerializer = (
   }
 }
 
-export const getSignedURL = (s3: AWS.S3, path: string) => {
+export const getSignedURL = (s3, path) => {
   return s3.getSignedUrl('getObject', {
     Key: path,
     Bucket: process.env.ATTACHMENT_BUCKET,
   })
 }
 
-export const createSignedURL = async (s3: AWS.S3, pgClient: Client, input) => {
+export const createSignedURL = async (s3, pgClient, input) => {
   const path = 'attachments/movies/{uuid}'.replace('{uuid}', input.uuid)
 
   const attachment = (

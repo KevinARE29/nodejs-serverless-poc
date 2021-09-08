@@ -1,0 +1,17 @@
+{
+  "name": "movies-service-create-movie",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist/",
+    "build": "npm run clean && rm -rf node_module && npm ci --production",
+    "bundle": "npm run build && mkdir -p dist && zip -r dist/lambda.zip *.js node_modules/**"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.983.0",
+    "aws-xray-sdk": "^3.3.3",
+    "nanoid": "^3.1.25",
+    "pg": "^8.7.1"
+  }
+}

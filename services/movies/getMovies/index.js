@@ -2,7 +2,7 @@ import { Client } from 'pg'
 import { paginationSerializer } from './utils'
 
 exports.handler = async (event, context) => {
-  let pgClient: Client
+  let pgClient
 
   try {
     const { page, perPage } = event.queryStringParameters
