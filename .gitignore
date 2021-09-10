@@ -41,5 +41,6 @@ coverage
 .cdk.staging
 cdk.out
 
-# SAM Template
+# SAM CLI
 infrastructure/template.yaml
+infrastructure/env.json

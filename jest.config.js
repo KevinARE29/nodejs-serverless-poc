@@ -1,8 +1,10 @@
 module.exports = {
+  rootDir: process.env.PWD,
   testEnvironment: 'node',
-  roots: ['<rootDir>/test'],
-  testMatch: ['**/*.test.ts'],
+  resetMocks: true,
+  testMatch: ['**/*.test.(t|j)s'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.ts?$': 'ts-jest',
   },
+  verbose: true,
 }
