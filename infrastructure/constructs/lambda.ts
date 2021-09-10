@@ -26,15 +26,3 @@ export class NodejsServiceFunction extends NodejsFunction {
     this.addEnvironment('LOG_LEVEL', '40')
   }
 }
-
-export const defaultCommandHooks = {
-  beforeBundling(inputDir: string, outputDir: string): string[] {
-    return ['']
-  },
-  beforeInstall(inputDir: string, outputDir: string): string[] {
-    return ['']
-  },
-  afterBundling(inputDir: string, outputDir: string): string[] {
-    return ['']
-  },
-}
