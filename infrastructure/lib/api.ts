@@ -3,10 +3,6 @@ import * as lambda from '@aws-cdk/aws-lambda'
 import * as apigw from '@aws-cdk/aws-apigateway'
 import * as cognito from '@aws-cdk/aws-cognito'
 import { CorsHttpMethod, HttpMethod } from '@aws-cdk/aws-apigatewayv2'
-import {
-  createMovieModelOptions,
-  updateMovieModelOptions,
-} from './models/movie'
 
 interface ApplicationAPIProps {
   getMovies: lambda.IFunction
@@ -39,24 +35,6 @@ export class ApplicationAPI extends cdk.Construct {
       },
     })
 
-    const requestValidator = this.restApi.addRequestValidator(
-      'RequestValidator',
-      {
-        validateRequestParameters: true,
-        validateRequestBody: true,
-      },
-    )
-
-    this.restApi.addGatewayResponse('BadRequestBodyResponse', {
-      type: apigw.ResponseType.BAD_REQUEST_BODY,
-      statusCode: '400',
-      templates: {
-        'application/json': JSON.stringify({
-          message: '$context.error.validationErrorString',
-        }),
-      },
-    })
-
     // Authorizer -------------------------------------------------------
 
     const authorizer = new apigw.CognitoUserPoolsAuthorizer(
@@ -79,36 +57,15 @@ export class ApplicationAPI extends cdk.Construct {
       props.createMovie,
     )
 
-    // Models (DTOs)
-    const createMovieModel = this.restApi.addModel(
-      'CreateMovieModel',
-      createMovieModelOptions,
-    )
-    const updateMovieModel = this.restApi.addModel(
-      'UpdateMovieModel',
-      updateMovieModelOptions,
-    )
-
     //Routes
     movies.addMethod(HttpMethod.GET, getMoviesIntegration, {
-      requestParameters: {
-        'method.request.querystring.page': true,
-        'method.request.querystring.perPage': true,
-      },
-      requestValidator,
+      authorizer,
     })
-    movies.addMethod(HttpMethod.POST, createMovieIntegration, {
-      requestModels: { 'application/json': createMovieModel },
-      requestValidator,
-    })
+    movies.addMethod(HttpMethod.POST, createMovieIntegration)
     movie.addMethod(HttpMethod.GET, getMovieIntegration, {
       authorizer,
     })
-    movie.addMethod(HttpMethod.PUT, getMoviesIntegration, {
-      authorizer,
-      requestModels: { 'application/json': updateMovieModel },
-      requestValidator,
-    })
+    movie.addMethod(HttpMethod.PUT, getMoviesIntegration)
     movie.addMethod(HttpMethod.DELETE, getMoviesIntegration, {
       authorizer,
     })
