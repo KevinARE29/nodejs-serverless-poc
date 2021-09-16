@@ -1,8 +1,8 @@
 import { Client } from 'pg'
-import { AWSClients } from '../../common/aws'
+import * as AWS from 'aws-sdk'
 import { createSignedURL } from './utils'
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   let pgClient
   try {
     const { poster, ...input } = JSON.parse(event.body)
@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
       )
     ).rows[0]
 
-    const s3 = AWSClients.s3()
+    const s3 = new AWS.S3()
     const attachment = await createSignedURL(s3, pgClient, {
       contentType: poster.contentType,
       ext: poster.ext,

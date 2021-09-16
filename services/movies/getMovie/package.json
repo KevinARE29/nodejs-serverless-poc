@@ -1,9 +1,11 @@
 {
-  "name": "movies-service-get-movie",
+  "name": "@movies-service/get-movie",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "format": "prettier --write \"**/*.js\" \"**/*.js\"",
+    "lint": "npx eslint . --fix --ext .js,.ts --max-warnings 0",
     "clean": "rm -rf dist/",
     "build": "npm run clean && rm -rf node_module && npm ci --production",
     "bundle": "npm run build && mkdir -p dist && zip -r dist/lambda.zip *.js node_modules/**"
