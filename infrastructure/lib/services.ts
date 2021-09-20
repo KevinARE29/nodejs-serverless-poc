@@ -40,6 +40,13 @@ export class AppServices extends cdk.Construct {
       },
     })
 
+    props.attachmentBucket.grantRead(this.getMovies)
+
+    this.getMovies.addEnvironment(
+      'ATTACHMENT_BUCKET',
+      props.attachmentBucket.bucketName,
+    )
+
     // Get Movie -------------------------------------------------
     this.getMovie = new NodejsServiceFunction(this, 'GetMovie', {
       functionName: 'GetMovie',
@@ -50,6 +57,11 @@ export class AppServices extends cdk.Construct {
         DATABASE_URL: databaseUrl,
       },
     })
+
+    this.getMovie.addEnvironment(
+      'ATTACHMENT_BUCKET',
+      props.attachmentBucket.bucketName,
+    )
 
     // Create Movie -------------------------------------------------
     this.createMovie = new NodejsServiceFunction(this, 'CreateMovie', {

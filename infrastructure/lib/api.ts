@@ -20,6 +20,9 @@ export class ApplicationAPI extends cdk.Construct {
     // API Gateway ------------------------------------------------------
 
     this.restApi = new apigw.RestApi(this, 'RestApi', {
+      deployOptions: {
+        stageName: process.env.STAGE_ENV ?? 'dev',
+      },
       restApiName: 'serverless-api-nest',
       defaultCorsPreflightOptions: {
         allowHeaders: ['Authorization', 'Content-Type', '*'],
@@ -48,7 +51,7 @@ export class ApplicationAPI extends cdk.Construct {
     // Movies Endpoints -------------------------------------------------
     // Resources
     const movies = this.restApi.root.addResource('movies')
-    const movie = movies.addResource('{movie_id}')
+    const movie = movies.addResource('{movie_uuid}')
 
     // Lambdas Integrations
     const getMoviesIntegration = new apigw.LambdaIntegration(props.getMovies)

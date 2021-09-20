@@ -7,7 +7,7 @@
   "scripts": {
     "cdk": "cdk",
     "format": "prettier --write \"**/*.ts\" \"**/*.ts\"",
-    "lint": "npx eslint . --fix --ext .js,.ts --max-warnings 0",
+    "lint": "npx eslint . --fix --ext .ts --max-warnings 0",
     "start": "cdk synth --no-staging > template.yaml && sam local start-api --env-vars env.json",
     "test": "npx jest --config=../jest.config.js",
     "test:cov": "npx jest --config=../jest.config.js --coverage"
