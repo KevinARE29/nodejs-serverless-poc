@@ -1,0 +1,13 @@
+{
+  "requestContext": {
+    "authorizer": {
+      "sub": "uuid",
+      "cognito:username": "uuid",
+      "email": "email"
+    }
+  },
+  "queryStringParameters": {
+    "page": "1",
+    "perPage": "10"
+  }
+}

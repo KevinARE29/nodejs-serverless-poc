@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GetMovies should return a 200 1`] = `
+Object {
+  "data": ArrayContaining [
+    Object {
+      "duration": Any<Number>,
+      "isActive": Any<Boolean>,
+      "likes": Any<Number>,
+      "name": Any<String>,
+      "poster": Any<String>,
+      "price": Any<Number>,
+      "synopsis": Any<String>,
+      "uuid": Any<String>,
+    },
+  ],
+  "pagination": ObjectContaining {
+    "page": Any<Number>,
+    "perPage": Any<Number>,
+    "total": Any<Number>,
+    "totalPages": Any<Number>,
+  },
+}
+`;
+
+exports[`GetMovies should return a 200 without pagination params 1`] = `
+Object {
+  "data": ArrayContaining [
+    Object {
+      "duration": Any<Number>,
+      "isActive": Any<Boolean>,
+      "likes": Any<Number>,
+      "name": Any<String>,
+      "poster": Any<String>,
+      "price": Any<Number>,
+      "synopsis": Any<String>,
+      "uuid": Any<String>,
+    },
+  ],
+  "pagination": ObjectContaining {
+    "page": Any<Number>,
+    "perPage": Any<Number>,
+    "total": Any<Number>,
+    "totalPages": Any<Number>,
+  },
+}
+`;
