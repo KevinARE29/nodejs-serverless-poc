@@ -1,0 +1,12 @@
+{
+  "requestContext": {
+    "authorizer": {
+      "sub": "uuid",
+      "cognito:username": "uuid",
+      "email": "email"
+    }
+  },
+  "pathParameters": {
+    "movie_uuid": "77f7a99c-21cb-4d57-8c1d-8d75a048c0e9"
+  }
+}
