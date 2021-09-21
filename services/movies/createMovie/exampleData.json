@@ -1,0 +1,10 @@
+{
+  "requestContext": {
+    "authorizer": {
+      "sub": "uuid",
+      "cognito:username": "uuid",
+      "email": "email"
+    }
+  },
+  "body": "{\"name\":\"Test Movie\",\"duration\":12,\"price\":1,\"poster\":{\"contentType\":\"image/png\",\"ext\":\"png\",\"filename\":\"photo\"}}"
+}

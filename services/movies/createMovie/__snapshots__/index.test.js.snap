@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createMovie should create a movie 1`] = `
+Object {
+  "data": Object {
+    "duration": Any<Number>,
+    "isActive": Any<Boolean>,
+    "likes": Any<Number>,
+    "name": Any<String>,
+    "poster": Any<String>,
+    "price": Any<Number>,
+    "synopsis": null,
+    "uuid": Any<String>,
+  },
+}
+`;

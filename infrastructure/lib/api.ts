@@ -64,11 +64,11 @@ export class ApplicationAPI extends cdk.Construct {
     movies.addMethod(HttpMethod.GET, getMoviesIntegration, {
       authorizer,
     })
-    movies.addMethod(HttpMethod.POST, createMovieIntegration)
+    movies.addMethod(HttpMethod.POST, createMovieIntegration, { authorizer })
     movie.addMethod(HttpMethod.GET, getMovieIntegration, {
       authorizer,
     })
-    movie.addMethod(HttpMethod.PUT, getMoviesIntegration)
+    movie.addMethod(HttpMethod.PUT, getMoviesIntegration, { authorizer })
     movie.addMethod(HttpMethod.DELETE, getMoviesIntegration, {
       authorizer,
     })
