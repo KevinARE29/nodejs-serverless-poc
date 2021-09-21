@@ -93,7 +93,7 @@ module.exports.handler = async (event) => {
       price: row.price,
       likes: row.likes,
       isActive: row.is_active,
-      ...(row.attachment && {
+      ...(row.poster_id && {
         poster: getSignedURL(s3, `${row.path}/${row.key}.${row.ext}`),
       }),
     }))

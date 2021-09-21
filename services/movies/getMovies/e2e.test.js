@@ -8,10 +8,10 @@ const AWS = require('aws-sdk')
 describe('GetMovies', () => {
   const cognitoClient = new AWS.CognitoIdentityServiceProvider({
     apiVersion: '2016-04-19',
-    region: 'us-east-2',
+    region: process.env.AWS_REGION,
   })
   const mockUser = {
-    username: 'user@mock.com',
+    username: 'get-movies@mock.com',
     password: '(8#Lkk@Q',
   }
   let headers
@@ -19,7 +19,7 @@ describe('GetMovies', () => {
   beforeAll(async () => {
     await cognitoClient
       .adminCreateUser({
-        UserPoolId: 'us-east-2_9e54PXPux',
+        UserPoolId: process.env.COGNITO_POOL_ID,
         Username: mockUser.username,
         TemporaryPassword: mockUser.password,
         UserAttributes: [
@@ -37,7 +37,7 @@ describe('GetMovies', () => {
 
     await cognitoClient
       .adminSetUserPassword({
-        UserPoolId: 'us-east-2_9e54PXPux',
+        UserPoolId: process.env.COGNITO_POOL_ID,
         Username: mockUser.username,
         Password: mockUser.password,
         Permanent: true,
@@ -48,8 +48,8 @@ describe('GetMovies', () => {
       AuthenticationResult: { IdToken: token },
     } = await cognitoClient
       .adminInitiateAuth({
-        UserPoolId: 'us-east-2_9e54PXPux',
-        ClientId: '6j0q6d6d8u1mcu522e35oqhkdo',
+        UserPoolId: process.env.COGNITO_POOL_ID,
+        ClientId: process.env.COGNITO_CLIENT_ID,
         AuthFlow: 'ADMIN_NO_SRP_AUTH',
         AuthParameters: {
           USERNAME: mockUser.username,
@@ -64,15 +64,27 @@ describe('GetMovies', () => {
   afterAll(async () => {
     await cognitoClient
       .adminDeleteUser({
-        UserPoolId: 'us-east-2_9e54PXPux',
+        UserPoolId: process.env.COGNITO_POOL_ID,
         Username: mockUser.username,
       })
       .promise()
   })
 
-  it('should return a 401', async () => {
+  it('should return a 401 authorization header is not send', async () => {
     const res = await fetch(`${process.env.DOMAIN}/movies`, {
       method: 'GET',
+    })
+
+    const resBody = await res.json()
+
+    expect(res.status).toBe(401)
+    expect(resBody.message).toBe('Unauthorized')
+  })
+
+  it('should return a 401 authorization header is not valid', async () => {
+    const res = await fetch(`${process.env.DOMAIN}/movies`, {
+      method: 'GET',
+      headers: { ...headers, Authorization: 'fake token' },
     })
 
     const resBody = await res.json()
