@@ -1,5 +1,5 @@
 {
-  "name": "@movies-service/create-movie",
+  "name": "@movies-service/update-movie",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -15,8 +15,6 @@
   },
   "dependencies": {
     "@sindresorhus/is": "^4.2.0",
-    "aws-sdk": "^2.983.0",
-    "nanoid": "^3.1.25",
     "pg": "^8.7.1"
   }
 }

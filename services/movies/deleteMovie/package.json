@@ -1,5 +1,5 @@
 {
-  "name": "@movies-service/create-movie",
+  "name": "@movies-service/delete-movie",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -14,9 +14,6 @@
     "test:e2e": "npx dotenv -e .env.test -- npx jest --group=e2e --config=../../../jest.config.js"
   },
   "dependencies": {
-    "@sindresorhus/is": "^4.2.0",
-    "aws-sdk": "^2.983.0",
-    "nanoid": "^3.1.25",
     "pg": "^8.7.1"
   }
 }

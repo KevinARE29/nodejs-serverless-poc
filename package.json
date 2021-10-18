@@ -2,7 +2,6 @@
   "name": "serverless-api-nest",
   "private": true,
   "scripts": {
-    "prepare": "husky install",
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean -y",
     "format": "lerna run format --parallel",

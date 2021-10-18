@@ -1,12 +1,4 @@
 const pg = require('pg')
-const { S3 } = require('aws-sdk')
-
-const getSignedURL = (s3, path) => {
-  return s3.getSignedUrl('getObject', {
-    Key: path,
-    Bucket: process.env.ATTACHMENT_BUCKET,
-  })
-}
 
 const errorMap = {
   INVALID_UUID_ROUTE_PARAM: {
@@ -56,27 +48,14 @@ exports.handler = async (event) => {
       }
     }
 
+    await pgClient.query('DELETE FROM movies WHERE uuid = $1', [movieUUID])
+
     await pgClient.end()
 
-    const s3 = new S3()
-    const mappedMovies = {
-      uuid: row.uuid,
-      name: row.name,
-      synopsis: row.synopsis,
-      duration: row.duration,
-      price: row.price,
-      likes: row.likes,
-      isActive: row.is_active,
-      ...(row.poster_id && {
-        poster: getSignedURL(s3, `${row.path}/${row.key}.${row.ext}`),
-      }),
-    }
+    // TODO: Delete related images from S3
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: mappedMovies,
-      }),
+      statusCode: 204,
     }
   } catch (err) {
     console.error(err)
