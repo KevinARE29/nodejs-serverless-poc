@@ -8,6 +8,8 @@ interface ApplicationAPIProps {
   getMovies: lambda.IFunction
   getMovie: lambda.IFunction
   createMovie: lambda.IFunction
+  updateMovie: lambda.IFunction
+  deleteMovie: lambda.IFunction
   userPool: cognito.IUserPool
 }
 
@@ -59,6 +61,12 @@ export class ApplicationAPI extends cdk.Construct {
     const createMovieIntegration = new apigw.LambdaIntegration(
       props.createMovie,
     )
+    const updateMovieIntegration = new apigw.LambdaIntegration(
+      props.updateMovie,
+    )
+    const deleteMovieIntegration = new apigw.LambdaIntegration(
+      props.deleteMovie,
+    )
 
     //Routes
     movies.addMethod(HttpMethod.GET, getMoviesIntegration, {
@@ -68,8 +76,8 @@ export class ApplicationAPI extends cdk.Construct {
     movie.addMethod(HttpMethod.GET, getMovieIntegration, {
       authorizer,
     })
-    movie.addMethod(HttpMethod.PUT, getMoviesIntegration, { authorizer })
-    movie.addMethod(HttpMethod.DELETE, getMoviesIntegration, {
+    movie.addMethod(HttpMethod.PUT, updateMovieIntegration, { authorizer })
+    movie.addMethod(HttpMethod.DELETE, deleteMovieIntegration, {
       authorizer,
     })
 

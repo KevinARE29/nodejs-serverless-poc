@@ -19,6 +19,8 @@ export class AppServices extends cdk.Construct {
   public readonly getMovies: NodejsFunction
   public readonly getMovie: NodejsFunction
   public readonly createMovie: NodejsFunction
+  public readonly updateMovie: NodejsFunction
+  public readonly deleteMovie: NodejsFunction
 
   constructor(scope: cdk.Construct, id: string, props: AppServicesProps) {
     super(scope, id)
@@ -80,5 +82,34 @@ export class AppServices extends cdk.Construct {
       'ATTACHMENT_BUCKET',
       props.attachmentBucket.bucketName,
     )
+
+    // Update Movie -------------------------------------------------
+    this.updateMovie = new NodejsServiceFunction(this, 'UpdateMovie', {
+      functionName: 'updateMovie',
+      entry: path.join(__dirname, '../../services/movies/updateMovie/index.js'),
+      vpc: props.vpc,
+      securityGroups: [props.lambdaToRDSProxyGroup],
+      environment: {
+        DATABASE_URL: databaseUrl,
+      },
+    })
+
+    props.attachmentBucket.grantWrite(this.createMovie)
+
+    this.createMovie.addEnvironment(
+      'ATTACHMENT_BUCKET',
+      props.attachmentBucket.bucketName,
+    )
+
+    // Delete Movie -------------------------------------------------
+    this.deleteMovie = new NodejsServiceFunction(this, 'DeleteMovie', {
+      functionName: 'DeleteMovie',
+      entry: path.join(__dirname, '../../services/movies/deleteMovie/index.js'),
+      vpc: props.vpc,
+      securityGroups: [props.lambdaToRDSProxyGroup],
+      environment: {
+        DATABASE_URL: databaseUrl,
+      },
+    })
   }
 }
