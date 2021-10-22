@@ -7,7 +7,6 @@ Object {
     "isActive": Any<Boolean>,
     "likes": Any<Number>,
     "name": Any<String>,
-    "poster": Any<String>,
     "price": Any<Number>,
     "synopsis": Any<String>,
     "uuid": Any<String>,

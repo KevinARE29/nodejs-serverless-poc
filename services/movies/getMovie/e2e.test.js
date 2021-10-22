@@ -153,7 +153,6 @@ describe('GetMovie', () => {
         price: expect.any(Number),
         likes: expect.any(Number),
         isActive: expect.any(Boolean),
-        poster: expect.any(String),
       },
     })
   })
