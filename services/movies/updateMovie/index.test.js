@@ -71,7 +71,7 @@ describe('updateMovie', () => {
     })
     const body = JSON.parse(result.body)
 
-    expect(result.statusCode).toBe(201)
+    expect(result.statusCode).toBe(200)
     expect(body).toMatchSnapshot({
       data: {
         uuid: expect.any(String),

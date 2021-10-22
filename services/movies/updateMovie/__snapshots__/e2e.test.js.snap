@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateMovie should return a 200 1`] = `
+Object {
+  "data": Object {
+    "duration": Any<Number>,
+    "isActive": Any<Boolean>,
+    "likes": Any<Number>,
+    "name": Any<String>,
+    "price": Any<Number>,
+    "synopsis": null,
+    "uuid": Any<String>,
+  },
+}
+`;
