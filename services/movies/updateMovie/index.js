@@ -42,6 +42,11 @@ const errorMap = {
     statusCode: 400,
     message: 'movie_uuid must be a valid uuid',
   },
+  MOVIE_NOT_FOUND: {
+    code: 'Not found',
+    statusCode: 404,
+    message: 'No Movie found',
+  },
 }
 
 exports.handler = async (event) => {
@@ -93,6 +98,19 @@ exports.handler = async (event) => {
     pgClient = new pg.Client(process.env.DATABASE_URL)
     await pgClient.connect()
 
+    const movie = (
+      await pgClient.query('SELECT * FROM movies WHERE uuid = $1', [movieUUID])
+    ).rows[0]
+
+    if (!movie) {
+      await pgClient.end()
+
+      return {
+        statusCode: 404,
+        body: JSON.stringify(errorMap.MOVIE_NOT_FOUND),
+      }
+    }
+
     const updatedMovie = (
       await pgClient.query(
         'UPDATE movies SET name = $2, synopsis = $3, duration = $4, price = $5 WHERE uuid = $1 RETURNING *',
@@ -102,10 +120,20 @@ exports.handler = async (event) => {
 
     await pgClient.end()
 
+    const mappedMovie = {
+      uuid: updatedMovie.uuid,
+      name: updatedMovie.name,
+      synopsis: updatedMovie.synopsis,
+      duration: updatedMovie.duration,
+      price: updatedMovie.price,
+      likes: updatedMovie.likes,
+      isActive: updatedMovie.is_active,
+    }
+
     return {
       statusCode: 201,
       body: JSON.stringify({
-        data: updatedMovie,
+        data: mappedMovie,
       }),
     }
   } catch (err) {
