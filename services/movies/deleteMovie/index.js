@@ -32,14 +32,11 @@ exports.handler = async (event) => {
     pgClient = new pg.Client(process.env.DATABASE_URL)
     await pgClient.connect()
 
-    const row = (
-      await pgClient.query(
-        'SELECT m.*, a.path, a.key, a.ext attachment FROM movies m LEFT JOIN attachments a on m.poster_id = a.id WHERE m.uuid = $1',
-        [movieUUID],
-      )
+    const movie = (
+      await pgClient.query('SELECT * FROM movies WHERE uuid = $1', [movieUUID])
     ).rows[0]
 
-    if (!row) {
+    if (!movie) {
       await pgClient.end()
 
       return {
