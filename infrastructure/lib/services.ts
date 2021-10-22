@@ -85,7 +85,7 @@ export class AppServices extends cdk.Construct {
 
     // Update Movie -------------------------------------------------
     this.updateMovie = new NodejsServiceFunction(this, 'UpdateMovie', {
-      functionName: 'updateMovie',
+      functionName: 'UpdateMovie',
       entry: path.join(__dirname, '../../services/movies/updateMovie/index.js'),
       vpc: props.vpc,
       securityGroups: [props.lambdaToRDSProxyGroup],
