@@ -1,0 +1,514 @@
+openapi: 3.0.0
+info:
+  title: Serverless POC API
+  description: |
+    Serverless POC API.
+  version: 1.0.0
+servers:
+  - url: https://12a9pt1xd2.execute-api.us-east-2.amazonaws.com/dev
+    description: Development Server
+tags:
+  - name: movies
+    description: CRUD of movies
+paths:
+  /movies:
+    get:
+      summary: Get a list of movies.
+      tags:
+        - movies
+      description: This will return a list of paginated movies
+      parameters:
+        - name: page
+          in: query
+          description: Current page
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+            maximum: 20
+        - name: perPage
+          in: query
+          description: The number of movies to return per page
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+      responses:
+        '200':
+          description: Movies Retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: List of movies.
+                    items:
+                      type: object
+                      properties:
+                        uuid:
+                          type: string
+                          description: The movie uuid.
+                        name:
+                          type: string
+                          description: The movie name.
+                        synopsis:
+                          type: string
+                          description: A brief synopsis of the movie.
+                        duration:
+                          type: number
+                          description: The movie duration (in minutes).
+                        price:
+                          type: number
+                          description: The movie price (in dollars).
+                        likes:
+                          type: number
+                          description: The movie likes counter.
+                        isActive:
+                          type: boolean
+                          description: Flag that determines if the movie is active or not.
+                        poster:
+                          type: string
+                          description: The movie poster URL.
+                  pagination:
+                    type: object
+                    description: Pagination related information.
+                    properties:
+                      perPage:
+                        type: number
+                        description: The max number of movies returned per page.
+                      total:
+                        type: number
+                        description: Total items.
+                      page:
+                        type: number
+                        description: Current page.
+                      prevPage:
+                        type: number
+                        description: Previous page number.
+                      nextPage:
+                        type: number
+                        description: Next page number.
+                      totalPages:
+                        type: number
+                        description: Total number of pages.
+        '400':
+          description: The specified parameters are not valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 400
+                  code:
+                    type: string
+                    example: 'Bad Request'
+                  message:
+                    type: string
+                    example: 'page must be a positive integer'
+        '401':
+          description: Expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'The incoming token has expired'
+        '500':
+          description: A general error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'A general error occurred'
+    post:
+      summary: Create a movie
+      tags:
+        - movies
+      description: This will create a new movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The movie name
+                  minLength: 1
+                synopsis:
+                  type: string
+                  description: The movie description
+                  minLength: 1
+                duration:
+                  type: number
+                  description: The movie duration (in minutes).
+                price:
+                  type: number
+                  description: The movie price (in dollars).
+                poster:
+                  type: object
+                  description: Poster image details
+                  properties:
+                    contentType:
+                      type: string
+                      description: The poster content type
+                      example: 'image/png'
+                    ext:
+                      type: string
+                      description: The poster ext
+                      example: png
+                    filename:
+                      type: string
+                      description: The movie filename
+                  required:
+                    - contentType
+                    - ext
+                    - filename
+              required:
+                - name
+                - duration
+                - price
+                - poster
+      responses:
+        '201':
+          description: Movie information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    description: The movie uuid.
+                  name:
+                    type: string
+                    description: The movie name.
+                  synopsis:
+                    type: string
+                    description: A brief synopsis of the movie.
+                  duration:
+                    type: number
+                    description: The movie duration (in minutes).
+                  price:
+                    type: number
+                    description: The movie price (in dollars).
+                  likes:
+                    type: number
+                    description: The movie likes counter.
+                  isActive:
+                    type: boolean
+                    description: Flag that determines if the movie is active or not.
+                  poster:
+                    type: string
+                    description: The movie poster URL.
+        '400':
+          description: The specified parameters are not valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 400
+                  code:
+                    type: string
+                    example: 'Bad Request'
+                  message:
+                    type: string
+                    example: 'duration must be a positive number'
+        '401':
+          description: Expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'The incoming token has expired'
+        '500':
+          description: A general error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'A general error occurred'
+  /movies/{movie_uuid}:
+    get:
+      summary: Get a movie by uuid.
+      tags:
+        - movies
+      description: This will return a movie by uuid
+      parameters:
+        - name: movie_uuid
+          in: path
+          description: Movie uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Movie Retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    description: The movie uuid.
+                  name:
+                    type: string
+                    description: The movie name.
+                  synopsis:
+                    type: string
+                    description: A brief synopsis of the movie.
+                  duration:
+                    type: number
+                    description: The movie duration (in minutes).
+                  price:
+                    type: number
+                    description: The movie price (in dollars).
+                  likes:
+                    type: number
+                    description: The movie likes counter.
+                  isActive:
+                    type: boolean
+                    description: Flag that determines if the movie is active or not.
+                  poster:
+                    type: string
+                    description: The movie poster URL.
+        '400':
+          description: The specified parameters are not valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 400
+                  code:
+                    type: string
+                    example: 'Bad Request'
+                  message:
+                    type: string
+                    example: 'movie_uuid must be a valid uuid'
+        '401':
+          description: Expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'The incoming token has expired'
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 404
+                  code:
+                    type: string
+                    example: 'Not Found'
+                  message:
+                    type: string
+                    example: 'No Movie found'
+        '500':
+          description: A general error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'A general error occurred'
+    put:
+      summary: Update a movie
+      tags:
+        - movies
+      description: This will update an existing movie
+      parameters:
+        - name: movie_uuid
+          in: path
+          description: Movie uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The movie name
+                  minLength: 1
+                synopsis:
+                  type: string
+                  description: The movie description
+                  minLength: 1
+                duration:
+                  type: number
+                  description: The movie duration (in minutes).
+                price:
+                  type: number
+                  description: The movie price (in dollars).
+      responses:
+        '200':
+          description: Movie information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    description: The movie uuid.
+                  name:
+                    type: string
+                    description: The movie name.
+                  synopsis:
+                    type: string
+                    description: A brief synopsis of the movie.
+                  duration:
+                    type: number
+                    description: The movie duration (in minutes).
+                  price:
+                    type: number
+                    description: The movie price (in dollars).
+                  likes:
+                    type: number
+                    description: The movie likes counter.
+                  isActive:
+                    type: boolean
+                    description: Flag that determines if the movie is active or not.
+        '400':
+          description: The specified parameters are not valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 400
+                  code:
+                    type: string
+                    example: 'Bad Request'
+                  message:
+                    type: string
+                    example: 'duration must be a positive number'
+        '401':
+          description: Expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'The incoming token has expired'
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 404
+                  code:
+                    type: string
+                    example: 'Not Found'
+                  message:
+                    type: string
+                    example: 'No Movie found'
+        '500':
+          description: A general error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'A general error occurred'
+    delete:
+      summary: Delete a movie by uuid.
+      tags:
+        - movies
+      description: This will delete a movie by uuid
+      parameters:
+        - name: movie_uuid
+          in: path
+          description: Movie uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Movie deleted sucessfully
+        '401':
+          description: Expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'The incoming token has expired'
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 404
+                  code:
+                    type: string
+                    example: 'Not Found'
+                  message:
+                    type: string
+                    example: 'No Movie found'
+        '500':
+          description: A general error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'A general error occurred'
