@@ -44,3 +44,5 @@ cdk.out
 # SAM CLI
 infrastructure/template.yaml
 infrastructure/env.json
+
+auth.json

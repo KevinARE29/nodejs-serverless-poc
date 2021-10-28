@@ -1,0 +1,9 @@
+{
+  "UserPoolId": "us-east-2_abc123",
+  "ClientId": "abc123",
+  "AuthFlow": "ADMIN_NO_SRP_AUTH",
+  "AuthParameters": {
+    "USERNAME": "fake@email.com",
+    "PASSWORD": "secure pass"
+  }
+}
